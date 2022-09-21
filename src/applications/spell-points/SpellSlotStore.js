@@ -97,7 +97,9 @@ export class SpellSlotStore {
     await this.fontOfMagic.update({
       "data.uses.value": newSorcPoints
     });
-    await ChatMessage.create({ content: message.join("") });
+    if(message.length) {
+      await ChatMessage.create({ content: message.join("") });
+    }
   }
   
 }
