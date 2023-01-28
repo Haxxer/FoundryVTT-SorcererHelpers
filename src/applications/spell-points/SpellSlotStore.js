@@ -11,16 +11,19 @@ export class SpellSlotStore {
   
   setup() {
     
-    this.currSorcPoints = this.fontOfMagic.data.data.uses.value;
-    this.maxSorcPoints = this.fontOfMagic.data.data.uses.max;
+    this.currSorcPoints = this.fontOfMagic.system.uses.value;
+    this.maxSorcPoints = this.fontOfMagic.system.uses.max;
     this.floatingSorcPoints = writable(this.currSorcPoints);
     
     this.spellSlots = [];
     
-    for (const [level, slot] of Object.entries(this.actor.data.data.spells)) {
+    for (const [level, slot] of Object.entries(this.actor.system.spells)) {
+
       const levelNum = Number(level[level.length - 1]) || slot?.level;
+
       if ((!slot.override && !slot.max) || levelNum > 5) continue;
-      const data = writable({
+
+      const spellSlot = writable({
         label: ordinalSuffixOf(levelNum) + " level" + (level === "pact" ? ` pact ` : ` spell `) + "slot",
         level: levelNum,
         max: slot.override || slot.max,
@@ -29,13 +32,13 @@ export class SpellSlotStore {
         spellPoints: levelNum,
         spellPointCost: level === "pact" ? false : (levelNum < 3 ? levelNum + 1 : levelNum + 2),
         pact: level === "pact",
-        path: `data.spells.${level}.value`
+        path: `system.spells.${level}.value`
       });
       
       if (level === "pact") {
-        this.spellSlots.unshift(data);
+        this.spellSlots.unshift(spellSlot);
       } else {
-        this.spellSlots.push(data);
+        this.spellSlots.push(spellSlot);
       }
     }
   }
@@ -95,7 +98,7 @@ export class SpellSlotStore {
       message.push(`<p>In total, they ${newSorcPoints > this.currSorcPoints ? "created" : "spent"} ${Math.abs(newSorcPoints - this.currSorcPoints)}${newSorcPoints < this.currSorcPoints ? " out of their " + this.maxSorcPoints : ""} Sorcery Points.</p>`)
     }
     await this.fontOfMagic.update({
-      "data.uses.value": newSorcPoints
+      "system.uses.value": newSorcPoints
     });
     if(message.length) {
       await ChatMessage.create({ content: message.join("") });

@@ -1,12 +1,15 @@
 {
-  "name": "sorcererhelpers",
+  "id": "sorcererhelpers",
   "title": "DnD5e Sorcerer Helpers",
   "description": "This module adds sorcery point helpers for the Sorcerer class in the DnD5e system",
   "version": "100.0.0",
   "library": "false",
-  "manifestPlusVersion": "1.0.0",
-  "minimumCoreVersion": "0.8.9",
-  "compatibleCoreVersion": "9",
+  "minimumCoreVersion": "10",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10",
+    "maximum": "10"
+  },
   "authors": [
     {
       "name": "Wasp",
